@@ -20,36 +20,53 @@ public class StudentCollectionRepository implements StudentDao {
         this.students = students;
     }
 
-
-
     @Override
     public Student createStudent(String name, String email, String address) {
-        return new Student(StudentSequencer.nextStudentId(), name, email, address);
+        Student student = new Student(StudentSequencer.nextStudentId(), name, email, address);
+        students.add(student);
+        return student;
     }
 
     @Override
     public Student findByEmailIgnoreCase(String email) {
-        return findByEmailIgnoreCase(email);
-
+        for (Student student : students){
+            if (student.getEmail().equalsIgnoreCase(email)){
+                return student;
+            }
+        }
+        return null;
     }
 
     @Override
     public Collection<Student> findByNameContains(String name) {
-        return findByNameContains(name);
+        Collection<Student> studentCollection = new HashSet<>();
+        for (Student student : students){
+            if (student.getName().contains(name)){
+                studentCollection.add(student);
+            }
+            return studentCollection;
+        }
+        return null;
     }
 
     @Override
     public Student findById(int id) {
-        return findById(id);
+        for (Student student : students){
+            if (student.getId() == id){
+                return student;
+            }
+        }
+        return null;
     }
 
     @Override
     public Collection<Student> findAll() {
-        return findAll();
+        return students;
     }
 
     @Override
     public boolean removeStudent(Student student) {
+        students.remove(student);
         return false;
     }
 
